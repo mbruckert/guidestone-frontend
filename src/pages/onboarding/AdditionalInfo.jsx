@@ -40,7 +40,7 @@ export default function AdditionalInfo() {
   const [hobby, setHobby] = useState("");
 
   return (
-    <div>
+    <div style={{ marginTop: "50px" }}>
       <div
         style={{
           display: "flex",

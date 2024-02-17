@@ -4,6 +4,7 @@ import Eye from "../../assets/eye.png";
 import Radial from "../../assets/radial.svg";
 import { Token } from "@primer/react";
 import { AlertIcon } from "@primer/octicons-react";
+import { toast } from "react-hot-toast";
 
 export default function EyeTracking() {
   const navigate = useNavigate();
@@ -34,8 +35,14 @@ export default function EyeTracking() {
 
   useEffect(() => {
     if (count === 11) {
-      webgazer.end();
-      navigate("/more-info");
+      toast.success("Eye tracking complete! Storing tracking information...", {
+        duration: 5000,
+        position: "top-center",
+      });
+      setTimeout(() => {
+        webgazer.end();
+        navigate("/more-info");
+      }, 5000);
     }
   }, [count, navigate]);
 

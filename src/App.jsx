@@ -5,6 +5,7 @@ import Auth from "./pages/onboarding/Auth";
 import { ThemeProvider } from "@primer/react";
 import EyeTracking from "./pages/onboarding/EyeTracking";
 import AdditionalInfo from "./pages/onboarding/AdditionalInfo";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/more-info" element={<AdditionalInfo />} />
           </Routes>
         </BrowserRouter>
+        <Toaster />
       </ThemeProvider>
     </div>
   );
