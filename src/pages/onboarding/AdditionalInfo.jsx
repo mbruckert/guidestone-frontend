@@ -57,12 +57,23 @@ export default function AdditionalInfo() {
         </h2>
         <FormControl>
           <FormControl.Label>Name</FormControl.Label>
-          <TextInput placeholder="i.e. John Doe" width="400px" />
+          <TextInput
+            placeholder="i.e. John Doe"
+            width="400px"
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+          />
         </FormControl>
         <div style={{ height: "20px" }} />
         <FormControl>
           <FormControl.Label>Your Grade Level</FormControl.Label>
-          <Select style={{ width: "390px" }}>
+          <Select
+            style={{ width: "390px" }}
+            value={gradeLevel}
+            onChange={(e) => setGradeLevel(e.target.value)}
+          >
             {levels.map((level) => (
               <Select.Option key={level.value} value={level.value}>
                 {level.label}
@@ -133,7 +144,32 @@ export default function AdditionalInfo() {
           width="380px"
           style={{ width: "400px" }}
           onClick={() => {
-            navigate("/");
+            const userInfo = JSON.parse(
+              window.location.localStorage.getItem("userInfo")
+            );
+            fetch(
+              "https://guidestone-functions.azurewebsites.net/api/createUser",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  email: userInfo.email,
+                  name: userInfo.name,
+                  profile_pic_url: userInfo.picture,
+                  grade_level: gradeLevel,
+                  interests: hobbies,
+                }),
+              }
+            )
+              .then((res) => {
+                return res.json();
+              })
+              .then((data) => {
+                window.localStorage.setItem("userId", data["user_id"]);
+                navigate("/");
+              });
           }}
         >
           Start Learning

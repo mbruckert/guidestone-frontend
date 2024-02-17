@@ -6,6 +6,21 @@ import { useNavigate } from "react-router-dom";
 export default function Auth() {
   const navigate = useNavigate();
 
+  const client_id = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+  const handleLogin = () => {
+    const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
+    const options = {
+      redirect_uri: "http://localhost:5173/auth/redirect",
+      client_id: client_id,
+      response_type: "code",
+      prompt: "consent",
+      scope: "https://www.googleapis.com/auth/userinfo.email",
+    };
+    const qs = new URLSearchParams(options);
+    window.location = `${rootUrl}?${qs.toString()}`;
+  };
+
   return (
     <div>
       <img
@@ -48,7 +63,7 @@ export default function Auth() {
           leadingVisual={LockIcon}
           style={{ marginTop: "40px" }}
           onClick={() => {
-            navigate("/eye-tracking");
+            handleLogin();
           }}
         >
           Sign in with Google

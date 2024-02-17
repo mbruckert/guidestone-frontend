@@ -3,6 +3,7 @@ import Graph from "../components/Graph"; // Adjust the import path according to 
 import { TextInput, Button } from "@primer/react";
 import GeneratingPopup from "../components/GeneratingPopup";
 import ReadyLessonPopup from "../components/ReadyLessonPopup";
+import QuizPopup from "../components/QuizPopup";
 
 export default function Home() {
   // const nodes = [
@@ -111,12 +112,15 @@ export default function Home() {
             width="450px"
           />
         </div>
-        {/* <div style={{ marginTop: "10px" }}>
+        <div style={{ marginTop: "10px" }}>
           <Button onClick={() => setPopupState({ state: "generating" })}>
             Test Generating Popup
           </Button>
           <Button onClick={() => setPopupState({ state: "readyLesson" })}>
             Test Ready Lesson Popup
+          </Button>
+          <Button onClick={() => setPopupState({ state: "quiz" })}>
+            Test Quiz Popup
           </Button>
         </div>
         {popupState["state"] == "generating" && (
@@ -134,7 +138,15 @@ export default function Home() {
             title="Integrals"
             subtitle="Math -> Limits -> Derivatives"
           />
-        )} */}
+        )}
+        {popupState["state"] == "quiz" && (
+          <QuizPopup
+            isOpen={popupState["status"] == "quiz"}
+            closePopup={() => setPopupState({ state: "closed" })}
+            title="Integrals"
+            subtitle="Math -> Limits -> Derivatives"
+          />
+        )}
       </div>
       <Graph nodesData={nodes} edgesData={edges} />
     </div>

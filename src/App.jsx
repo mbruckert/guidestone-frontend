@@ -6,6 +6,7 @@ import { ThemeProvider } from "@primer/react";
 import EyeTracking from "./pages/onboarding/EyeTracking";
 import AdditionalInfo from "./pages/onboarding/AdditionalInfo";
 import { Toaster } from "react-hot-toast";
+import AuthRedirect from "./pages/onboarding/AuthRedirect";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/auth/redirect" element={<AuthRedirect />} />
             <Route path="/eye-tracking" element={<EyeTracking />} />
             <Route path="/more-info" element={<AdditionalInfo />} />
           </Routes>
