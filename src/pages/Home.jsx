@@ -111,7 +111,7 @@ export default function Home() {
             width="450px"
           />
         </div>
-        <div style={{ marginTop: "10px" }}>
+        {/* <div style={{ marginTop: "10px" }}>
           <Button onClick={() => setPopupState({ state: "generating" })}>
             Test Generating Popup
           </Button>
@@ -134,7 +134,7 @@ export default function Home() {
             title="Integrals"
             subtitle="Math -> Limits -> Derivatives"
           />
-        )}
+        )} */}
       </div>
       <Graph nodesData={nodes} edgesData={edges} />
     </div>
