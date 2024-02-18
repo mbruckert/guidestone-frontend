@@ -74,9 +74,8 @@ function Graph({
   useEffect(() => {
     // Load the profile image
     const img = new Image();
-    img.src = JSON.loads(window.localStorage.getItem("profileImg"))[
-      "profile_pic_url"
-    ];
+    console.log(JSON.parse(window.localStorage.getItem("userInfo")));
+    img.src = JSON.parse(window.localStorage.getItem("userInfo"))["picture"];
     img.onload = () => setProfileImg(img);
 
     // Load SVG icons

@@ -30,24 +30,16 @@ export default function ReadyLessonPopup({ isOpen, closePopup, node }) {
             />
             <div style={{ width: "350px" }}>
               <h4>Video Description</h4>
-              <p style={{ marginTop: "-20px" }}>
-                You did really good in the last lesson, but had some trouble
-                implementing integration by parts. In this newly generated
-                lesson, we dive deeper into integration by parts.
-              </p>
+              <p style={{ marginTop: "-20px" }}>TBD</p>
             </div>
           </div>
           <hr style={{ marginTop: "30px", marginBottom: "30px" }} />
           <div style={{ display: "flex", gap: "40px" }}>
             <div style={{ width: "420px" }}>
               <h4>Lesson Description</h4>
-              <p style={{ marginTop: "-20px" }}>
-                You’ve flown through this lesson! You instantly understood the
-                quotient and power rule, but struggled a bit with integration by
-                parts. Keep going and you’ll have it in no time!
-              </p>
+              <p style={{ marginTop: "-20px" }}>{node.blurb}</p>
             </div>
-            <div style={{ width: "250px" }}>
+            {/* <div style={{ width: "250px" }}>
               <h4>Lesson Description</h4>
               <div
                 style={{
@@ -71,7 +63,7 @@ export default function ReadyLessonPopup({ isOpen, closePopup, node }) {
                 <>Attempt #2</>
                 <Button leadingVisual={PlayIcon}>Watch Video</Button>
               </div>
-            </div>
+            </div> */}
           </div>
           <hr style={{ marginTop: "30px", marginBottom: "30px" }} />
           <h4>Lesson Topics</h4>
@@ -84,78 +76,49 @@ export default function ReadyLessonPopup({ isOpen, closePopup, node }) {
               flexWrap: "wrap",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "start",
-                alignItems: "center",
-                gap: "10px",
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                style={{ width: "20px", color: "#1EDA94" }}
+            {Object.entries(node.masteries).map(([mastery, level]) => (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "start",
+                  alignItems: "center",
+                  gap: "10px",
+                }}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-              <span>Power Rule</span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "start",
-                alignItems: "center",
-                gap: "10px",
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                style={{ width: "20px", color: "#1EDA94" }}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-              <span>Quotient Rule</span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "start",
-                alignItems: "center",
-                gap: "10px",
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                style={{ width: "20px", color: "#1EDA94" }}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                />
-              </svg>
-              <span>Integration by Parts</span>
-            </div>
+                {level == true ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    style={{ width: "20px", color: "#1EDA94" }}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    style={{ width: "20px", color: "#FF6161" }}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
+                )}
+                <span>{mastery}</span>
+              </div>
+            ))}
           </div>
         </div>
       </Dialog>

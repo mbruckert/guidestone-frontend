@@ -24,7 +24,10 @@ export default function Home() {
   const [newTopicDescription, setNewTopicDescription] = useState("");
 
   useEffect(() => {
-    //get ?quizId if it exists
+    //if there is no user_id in local storage, redirect to auth page
+    if (!window.localStorage.getItem("userId")) {
+      navigate("/auth");
+    }
 
     const urlParams = new URLSearchParams(window.location.search);
     const quizId = urlParams.get("quizId");
@@ -134,7 +137,7 @@ export default function Home() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_id: "15",
+        user_id: window.localStorage.getItem("userId"),
         topic: newTopicDescription,
       }),
     })
