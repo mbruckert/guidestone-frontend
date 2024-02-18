@@ -91,7 +91,7 @@ export default function QuizPopup({ isOpen, closePopup, node }) {
                       {index + 1}. {question.question}
                     </h4>
                     <div style={{ marginTop: "-20px" }}>
-                      {question.options.map((option, index) => (
+                      {question.choices.map((option, index) => (
                         <div
                           style={{
                             display: "flex",
@@ -108,7 +108,7 @@ export default function QuizPopup({ isOpen, closePopup, node }) {
                 ))}
             </div>
           </div>
-          <div
+          {/* <div
             style={{
               width: "420px",
               display: "flex",
@@ -181,14 +181,33 @@ export default function QuizPopup({ isOpen, closePopup, node }) {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
         <Button
           variant="primary"
           style={{ width: "100%" }}
           leadingVisual={CheckCircleIcon}
           onClick={() => {
-            closePopup();
+            fetch(
+              "https://guidestone-functions.azurewebsites.net/api/lessonDone",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  vision_points: JSON.parse(
+                    window.localStorage.getItem("gatheredData")
+                  )["eyeTracking"],
+                  node_id: node.node_id,
+                  user_id: window.localStorage.getItem("userId"),
+                  quiz_data: node.quiz,
+                }),
+              }
+            ).then(() => {
+              toast.success("Quiz submitted successfully!");
+              closePopup();
+            });
           }}
         >
           Check Answers
