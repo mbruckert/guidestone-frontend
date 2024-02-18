@@ -25,6 +25,7 @@ export default function ReadyLessonPopup({ isOpen, closePopup, node }) {
               alt="Player"
               style={{ width: "300px", cursor: "pointer" }}
               onClick={() => {
+                console.log(node);
                 navigate("/video/" + node.node_id);
               }}
             />

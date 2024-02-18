@@ -52,7 +52,16 @@ export default function AdditionalInfo() {
           flexDirection: "column",
         }}
       >
-        <Button leadingVisual={SignOutIcon}>Sign Out</Button>
+        <Button
+          leadingVisual={SignOutIcon}
+          onClick={() => {
+            window.localStorage.removeItem("userInfo");
+            window.localStorage.removeItem("userId");
+            navigate("/auth");
+          }}
+        >
+          Sign Out
+        </Button>
         <h2 style={{ width: "400px" }}>
           To make great videos{" "}
           <span style={{ fontWeight: "900" }}>just for you</span>, we need to
@@ -167,6 +176,18 @@ export default function AdditionalInfo() {
               }
             )
               .then((res) => {
+                window.localStorage.removeItem("userInfo");
+                window.localStorage.removeItem("userId");
+                window.localStorage.setItem(
+                  "userInfo",
+                  JSON.stringify({
+                    email: userInfo.email,
+                    name: name,
+                    profile_pic_url: userInfo.picture,
+                    grade_level: gradeLevel,
+                    interests: hobbies,
+                  })
+                );
                 return res.json();
               })
               .then((data) => {

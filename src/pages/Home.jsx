@@ -212,6 +212,11 @@ export default function Home() {
     // }, 5000);
   }, []);
 
+  function getFirstName(fullName) {
+    // Split the full name by spaces and return the first element
+    return fullName.split(" ")[0];
+  }
+
   return (
     <div
       style={{
@@ -259,7 +264,11 @@ export default function Home() {
             <h4
               style={{ color: "#5F5F5F", fontSize: "20px", fontWeight: "500" }}
             >
-              Welcome, Mark!
+              Welcome,{" "}
+              {getFirstName(
+                JSON.parse(window.localStorage.getItem("userInfo"))["name"]
+              )}
+              !
               {/* {window.localStorage.getItem("user") &&
                 JSON.parse(window.localStorage.getItem("user")).firstName}
               ! */}
@@ -268,7 +277,8 @@ export default function Home() {
           <Button
             leadingVisual={SignOutIcon}
             onClick={() => {
-              window.localStorage.removeItem("user");
+              window.localStorage.removeItem("userInfo");
+              window.localStorage.removeItem("userId");
               navigate("/auth");
             }}
           >

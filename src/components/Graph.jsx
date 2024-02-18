@@ -75,7 +75,9 @@ function Graph({
     // Load the profile image
     const img = new Image();
     console.log(JSON.parse(window.localStorage.getItem("userInfo")));
-    img.src = JSON.parse(window.localStorage.getItem("userInfo"))["picture"];
+    img.src = JSON.parse(window.localStorage.getItem("userInfo"))[
+      "profile_pic_url"
+    ];
     img.onload = () => setProfileImg(img);
 
     // Load SVG icons
@@ -224,7 +226,8 @@ function Graph({
           return data.json();
         })
         .then((data) => {
-          setSelectedNode(data);
+          var tempData = { ...data, node_id: node.id };
+          setSelectedNode(tempData);
           setPopupState({
             state: "readyLesson",
           });
