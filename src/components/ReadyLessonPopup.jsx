@@ -29,10 +29,14 @@ export default function ReadyLessonPopup({ isOpen, closePopup, node }) {
                 navigate("/video/" + node.node_id);
               }}
             />
-            <div style={{ width: "350px" }}>
+            {/* <div style={{ width: "350px" }}>
               <h4>Video Description</h4>
-              <p style={{ marginTop: "-20px" }}>TBD</p>
-            </div>
+              <p style={{ marginTop: "-20px" }}>
+                In this video, Rocky will teach how to solve square root
+                problems and demonstrate various real-world problems that
+                utilize square roots.
+              </p>
+            </div> */}
           </div>
           <hr style={{ marginTop: "30px", marginBottom: "30px" }} />
           <div style={{ display: "flex", gap: "40px" }}>

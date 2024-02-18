@@ -11,6 +11,8 @@ export default function VideoViewing() {
 
   const navigate = useNavigate();
 
+  const [selectedNode, setSelectedNode] = useState(null);
+
   const videoRef = useRef(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [previousTime, setPreviousTime] = useState(0);
@@ -36,6 +38,22 @@ export default function VideoViewing() {
   };
 
   useEffect(() => {
+    fetch("https://guidestone-functions.azurewebsites.net/api/getNodeDetails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        node_id: id,
+      }),
+    })
+      .then((data) => {
+        return data.json();
+      })
+      .then((data) => {
+        var tempData = { ...data, node_id: id };
+        setSelectedNode(tempData);
+      });
     // Initialize WebGazer here
     webgazer
       .setGazeListener((data, elapsedTime) => {
@@ -151,12 +169,15 @@ export default function VideoViewing() {
         justifyContent: "space-between",
       }}
     >
-      <video
-        ref={videoRef}
-        style={{ width: "90vw" }}
-        src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
-        controls
-      />
+      {selectedNode && selectedNode.video_url && (
+        <video
+          ref={videoRef}
+          style={{ width: "90vw" }}
+          src={selectedNode.video_url}
+          // src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
+          controls
+        />
+      )}
       <div
         style={{
           position: "absolute",
@@ -177,13 +198,13 @@ export default function VideoViewing() {
           <Box flexGrow={1} fontSize={2} fontWeight="bold" id="switchLabel">
             <span style={{ color: "white" }}>Show Eye Tracking</span>
           </Box>
-          <ToggleSwitch aria-labelledby="switchLabel" />
+          <ToggleSwitch aria-labelledby="switchLabel" defaultChecked />
         </Box>
       </div>
       <div
         style={{
-          width: "20px",
-          height: "20px",
+          width: "10px",
+          height: "10px",
           backgroundColor: "red",
           position: "fixed",
         }}

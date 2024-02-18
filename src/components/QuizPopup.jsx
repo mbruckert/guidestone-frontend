@@ -75,36 +75,37 @@ export default function QuizPopup({ isOpen, closePopup, node }) {
               Lesson Quiz
             </h3>
             <div style={{ marginTop: "-20px" }}>
-              {quizQuestions.map((question, index) => (
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "10px",
-                    padding: "5px",
-                    borderRadius: "10px",
-                    marginBottom: "20px",
-                  }}
-                >
-                  <h4>
-                    {index + 1}. {question.question}
-                  </h4>
-                  <div style={{ marginTop: "-20px" }}>
-                    {question.options.map((option, index) => (
-                      <div
-                        style={{
-                          display: "flex",
-                          gap: "10px",
-                          alignItems: "center",
-                        }}
-                      >
-                        <input type="radio" name={question.question} />
-                        <span>{option}</span>
-                      </div>
-                    ))}
+              {node.questions &&
+                node.questions.map((question, index) => (
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "10px",
+                      padding: "5px",
+                      borderRadius: "10px",
+                      marginBottom: "20px",
+                    }}
+                  >
+                    <h4>
+                      {index + 1}. {question.question}
+                    </h4>
+                    <div style={{ marginTop: "-20px" }}>
+                      {question.options.map((option, index) => (
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "10px",
+                            alignItems: "center",
+                          }}
+                        >
+                          <input type="radio" name={question.question} />
+                          <span>{option}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
           <div
