@@ -43,7 +43,6 @@ export default function QuizPopup({ isOpen, closePopup, node }) {
         width="2xlarge"
         height="md"
         title={node.node_name}
-        subtitle={subtitle}
       >
         <div
           style={{

@@ -6,6 +6,7 @@ import BiologyIcon from "../assets/biology.svg";
 import ChemistryIcon from "../assets/chemistry.svg";
 import ComputerScienceIcon from "../assets/computerscience.svg";
 import PhysicsIcon from "../assets/physics.svg";
+import EducationIcon from "../assets/education.png";
 import { toast } from "react-hot-toast";
 
 // const graphData = {
@@ -41,6 +42,7 @@ const iconMap = {
   chemistry_base_node: ChemistryIcon,
   comp_sci_base_node: ComputerScienceIcon,
   physics_base_node: PhysicsIcon,
+  sample: EducationIcon,
 };
 
 function Graph({
@@ -54,15 +56,6 @@ function Graph({
     nodes: nodesData,
     links: edgesData,
   };
-
-  const baseNodeIds = [
-    "start_node",
-    "math_base_node",
-    "biology_base_node",
-    "chemistry_base_node",
-    "comp_sci_base_node",
-    "physics_base_node",
-  ];
 
   const [profileImg, setProfileImg] = useState(null);
   const [icons, setIcons] = useState({});
@@ -105,7 +98,7 @@ function Graph({
     const textWidth = ctx.measureText(label).width + fontSize * 0.8; // Adding some padding
     const textHeight = fontSize * 1.4; // Height of the text with some padding
 
-    if (baseNodeIds.includes(node.id)) {
+    if (baseNodes.includes(node.id) || node.name == "You") {
       // Base nodes and start node
       const size = 80 / globalScale;
       const iconSize = size * 0.4; // Make icons a bit smaller than the node itself
@@ -117,7 +110,7 @@ function Graph({
       ctx.fill();
 
       // Draw the profile image for the start node
-      if (node.id === "start_node" && profileImg) {
+      if (node.name == "You" && profileImg) {
         ctx.save();
         ctx.beginPath();
         ctx.arc(node.x, node.y, size / 2, 0, Math.PI * 2, false);
@@ -132,7 +125,8 @@ function Graph({
         ctx.restore();
       } else {
         // Draw the icon for base nodes
-        const icon = icons[node.id];
+        // const icon = icons[node.id];
+        const icon = icons["sample"];
         if (icon) {
           ctx.drawImage(
             icon,
@@ -147,6 +141,13 @@ function Graph({
           ctx.textBaseline = "middle";
           ctx.fillStyle = "black";
           ctx.fillText(node.name, node.x, node.y + size / 2 + fontSize);
+        } else {
+          // Draw the text
+          ctx.font = `${fontSize}px Sans-Serif`;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillStyle = "black";
+          ctx.fillText(node.name, node.x, node.y);
         }
       }
     } else {
@@ -203,7 +204,9 @@ function Graph({
   };
 
   const handleNodeClick = (node) => {
-    if (!baseNodeIds.includes(node.id)) {
+    console.log(baseNodes);
+    console.log(node.id);
+    if (!baseNodes.includes(node.id) && node.name !== "You") {
       fetch(
         "https://guidestone-functions.azurewebsites.net/api/getNodeDetails",
         {
@@ -226,9 +229,13 @@ function Graph({
           });
         });
     } else {
-      toast(
-        "This is not a lesson, but intead a representation of what we predict you already know based on your grade level."
-      );
+      if (node.name !== "You") {
+        toast(
+          "This is not a lesson, but intead a representation of what we predict you already know based on your grade level."
+        );
+      } else {
+        toast("This is you!");
+      }
     }
   };
 
