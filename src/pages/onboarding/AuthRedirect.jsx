@@ -17,7 +17,7 @@ export default function AuthRedirect() {
       },
       body: JSON.stringify({
         code: urlParams.get("code"),
-        redirect_url: "http://localhost:5173/auth/redirect",
+        redirect_uri: "http://localhost:5173/auth/redirect",
       }),
     })
       .then((res) => {
@@ -25,22 +25,21 @@ export default function AuthRedirect() {
       })
       .then((data) => {
         console.log(data);
-        // async function fetchGoogleUserInfo(accessToken) {
-        //   fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
-        //     method: "GET",
-        //     headers: {
-        //       Authorization: `Bearer ${data["accessToken"]}`,
-        //       "Content-Type": "application/json",
-        //     },
-        //   })
-        //     .then((res) => {
-        //       return res.json();
-        //     })
-        //     .then((userInfo) => {
-        //       localStorage.setItem("userInfo", JSON.stringify(userInfo));
-        //       navigate("/eye-tracking");
-        //     });
-        // }
+        fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${data.access_token}`,
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => {
+            return res.json();
+          })
+          .then((userInfo) => {
+            console.log(userInfo);
+            localStorage.setItem("userInfo", JSON.stringify(userInfo));
+            navigate("/eye-tracking");
+          });
       });
   }, []);
 

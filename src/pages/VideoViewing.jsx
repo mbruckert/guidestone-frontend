@@ -2,6 +2,8 @@ import React, { useRef, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { XCircleIcon } from "@primer/octicons-react";
+import { Button, Box, ToggleSwitch } from "@primer/react";
 
 export default function VideoViewing() {
   // get the video id from the url
@@ -15,6 +17,10 @@ export default function VideoViewing() {
   const [action, setAction] = useState("");
   const [isWebGazerInitialized, setIsWebGazerInitialized] = useState(false);
 
+  const [showEyeTracking, setShowEyeTracking] = useState(false);
+
+  const eyeTrackerRef = useRef(null);
+
   const [gatheredData, setGatheredData] = useState({
     eyeTracking: [],
     pauses: [],
@@ -22,12 +28,20 @@ export default function VideoViewing() {
     fastForwards: [],
   });
 
+  const updateEyePosition = (x, y) => {
+    if (eyeTrackerRef.current) {
+      eyeTrackerRef.current.style.left = `${x}px`;
+      eyeTrackerRef.current.style.top = `${y}px`;
+    }
+  };
+
   useEffect(() => {
     // Initialize WebGazer here
     webgazer
       .setGazeListener((data, elapsedTime) => {
         if (data) {
-          console.log(data); // Log gaze data for debugging
+          webgazer.util.bound(data);
+          updateEyePosition(data.x, data.y);
         }
       })
       .begin()
@@ -130,12 +144,51 @@ export default function VideoViewing() {
   }, [isWebGazerInitialized, action]);
 
   return (
-    <div style={{ overflowY: "scroll" }}>
+    <div
+      style={{
+        overflowY: "scroll",
+        display: "flex",
+        justifyContent: "space-between",
+      }}
+    >
       <video
         ref={videoRef}
         style={{ width: "90vw" }}
         src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
         controls
+      />
+      <div
+        style={{
+          position: "absolute",
+          padding: "10px",
+          display: "flex",
+          gap: "20px",
+        }}
+      >
+        <Button
+          leadingVisual={XCircleIcon}
+          onClick={() => {
+            navigate("/");
+          }}
+        >
+          Close
+        </Button>
+        <Box display="flex" maxWidth="300px" style={{ alignItems: "center" }}>
+          <Box flexGrow={1} fontSize={2} fontWeight="bold" id="switchLabel">
+            <span style={{ color: "white" }}>Show Eye Tracking</span>
+          </Box>
+          <ToggleSwitch aria-labelledby="switchLabel" />
+        </Box>
+      </div>
+      <div
+        style={{
+          width: "20px",
+          height: "20px",
+          backgroundColor: "red",
+          position: "fixed",
+        }}
+        ref={eyeTrackerRef}
+        alt="Eye Tracker"
       />
     </div>
   );

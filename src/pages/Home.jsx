@@ -158,7 +158,7 @@ export default function Home() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          user_id: "15",
+          user_id: window.localStorage.getItem("userId"),
         }),
       }
     )
@@ -256,10 +256,10 @@ export default function Home() {
             <h4
               style={{ color: "#5F5F5F", fontSize: "20px", fontWeight: "500" }}
             >
-              Welcome,{" "}
-              {window.localStorage.getItem("user") &&
+              Welcome, Mark!
+              {/* {window.localStorage.getItem("user") &&
                 JSON.parse(window.localStorage.getItem("user")).firstName}
-              !
+              ! */}
             </h4>
           </div>
           <Button

@@ -26,7 +26,10 @@ export default function AdditionalInfo() {
     { value: "10", label: "10th Grade" },
     { value: "11", label: "11th Grade" },
     { value: "12", label: "12th Grade" },
-    { value: "College", label: "College" },
+    { value: "F", label: "Freshman" },
+    { value: "S", label: "Sophomore" },
+    { value: "J", label: "Junior" },
+    { value: "SR", label: "Senior" },
   ];
 
   const [tokens, setTokens] = useState([]);
@@ -145,7 +148,7 @@ export default function AdditionalInfo() {
           style={{ width: "400px" }}
           onClick={() => {
             const userInfo = JSON.parse(
-              window.location.localStorage.getItem("userInfo")
+              window.localStorage.getItem("userInfo")
             );
             fetch(
               "https://guidestone-functions.azurewebsites.net/api/createUser",
@@ -156,7 +159,7 @@ export default function AdditionalInfo() {
                 },
                 body: JSON.stringify({
                   email: userInfo.email,
-                  name: userInfo.name,
+                  name: name,
                   profile_pic_url: userInfo.picture,
                   grade_level: gradeLevel,
                   interests: hobbies,
@@ -167,6 +170,7 @@ export default function AdditionalInfo() {
                 return res.json();
               })
               .then((data) => {
+                console.log(data);
                 window.localStorage.setItem("userId", data["user_id"]);
                 navigate("/");
               });
