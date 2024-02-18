@@ -6,6 +6,7 @@ import BiologyIcon from "../assets/biology.svg";
 import ChemistryIcon from "../assets/chemistry.svg";
 import ComputerScienceIcon from "../assets/computerscience.svg";
 import PhysicsIcon from "../assets/physics.svg";
+import { toast } from "react-hot-toast";
 
 const graphData = {
   nodes: [
@@ -51,7 +52,7 @@ const baseNodeIds = [
   "physics_base_node",
 ];
 
-function Graph() {
+function Graph({ nodesData, edgesData, setPopupState }) {
   const [profileImg, setProfileImg] = useState(null);
   const [icons, setIcons] = useState({});
 
@@ -190,6 +191,18 @@ function Graph() {
     }
   };
 
+  const handleNodeClick = (node) => {
+    if (!baseNodeIds.includes(node.id)) {
+      setPopupState({
+        state: "readyLesson",
+      });
+    } else {
+      toast(
+        "This is not a lesson, but intead a representation of what we predict you already know based on your grade level."
+      );
+    }
+  };
+
   return (
     <ForceGraph2D
       ref={forceGraphRef}
@@ -199,6 +212,7 @@ function Graph() {
       nodeAutoColorBy="color"
       linkDirectionalParticles={4}
       linkDirectionalParticleSpeed={(d) => d.value * 0.001}
+      onNodeClick={handleNodeClick}
     />
   );
 }

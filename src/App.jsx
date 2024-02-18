@@ -7,6 +7,7 @@ import EyeTracking from "./pages/onboarding/EyeTracking";
 import AdditionalInfo from "./pages/onboarding/AdditionalInfo";
 import { Toaster } from "react-hot-toast";
 import AuthRedirect from "./pages/onboarding/AuthRedirect";
+import VideoViewing from "./pages/VideoViewing";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path="/auth/redirect" element={<AuthRedirect />} />
             <Route path="/eye-tracking" element={<EyeTracking />} />
             <Route path="/more-info" element={<AdditionalInfo />} />
+            <Route path="/video/:id" element={<VideoViewing />} />
           </Routes>
         </BrowserRouter>
         <Toaster />

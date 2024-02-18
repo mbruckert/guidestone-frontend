@@ -4,6 +4,7 @@ import { TextInput, Button } from "@primer/react";
 import GeneratingPopup from "../components/GeneratingPopup";
 import ReadyLessonPopup from "../components/ReadyLessonPopup";
 import QuizPopup from "../components/QuizPopup";
+import GradingPopup from "../components/GradingPopup";
 
 export default function Home() {
   // const nodes = [
@@ -32,10 +33,13 @@ export default function Home() {
     fetch(
       "https://guidestone-functions.azurewebsites.net/api/getGraphStructure",
       {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          user_id: "1",
+        }),
       }
     )
       .then((data) => {
@@ -112,7 +116,7 @@ export default function Home() {
             width="450px"
           />
         </div>
-        <div style={{ marginTop: "10px" }}>
+        {/* <div style={{ marginTop: "10px" }}>
           <Button onClick={() => setPopupState({ state: "generating" })}>
             Test Generating Popup
           </Button>
@@ -122,7 +126,10 @@ export default function Home() {
           <Button onClick={() => setPopupState({ state: "quiz" })}>
             Test Quiz Popup
           </Button>
-        </div>
+          <Button onClick={() => setPopupState({ state: "grading" })}>
+            Test Grading
+          </Button>
+        </div> */}
         {popupState["state"] == "generating" && (
           <GeneratingPopup
             isOpen={popupState["status"] == "generating"}
@@ -147,8 +154,20 @@ export default function Home() {
             subtitle="Math -> Limits -> Derivatives"
           />
         )}
+        {popupState["state"] == "grading" && (
+          <GradingPopup
+            isOpen={popupState["status"] == "grading"}
+            closePopup={() => setPopupState({ state: "closed" })}
+            title="Integrals"
+            subtitle="Math -> Limits -> Derivatives"
+          />
+        )}
       </div>
-      <Graph nodesData={nodes} edgesData={edges} />
+      <Graph
+        nodesData={nodes}
+        edgesData={edges}
+        setPopupState={setPopupState}
+      />
     </div>
   );
 }

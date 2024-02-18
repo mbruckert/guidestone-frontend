@@ -5,35 +5,38 @@ export default function AuthRedirect() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("https://guidestone-functions.azurewebsites.net/api/getToken", {
+    console.log(window.location.search.split("=")[1]);
+    fetch("https://guidestone-functions.azurewebsites.net/api/exchangeToken", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         code: window.location.search.split("=")[1],
+        redirect_url: "http://localhost:5173/auth/redirect",
       }),
     })
       .then((res) => {
         return res.json();
       })
       .then((data) => {
-        async function fetchGoogleUserInfo(accessToken) {
-          fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${data["accessToken"]}`,
-              "Content-Type": "application/json",
-            },
-          })
-            .then((res) => {
-              return res.json();
-            })
-            .then((userInfo) => {
-              localStorage.setItem("userInfo", JSON.stringify(userInfo));
-              navigate("/eye-tracking");
-            });
-        }
+        console.log(data);
+        // async function fetchGoogleUserInfo(accessToken) {
+        //   fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
+        //     method: "GET",
+        //     headers: {
+        //       Authorization: `Bearer ${data["accessToken"]}`,
+        //       "Content-Type": "application/json",
+        //     },
+        //   })
+        //     .then((res) => {
+        //       return res.json();
+        //     })
+        //     .then((userInfo) => {
+        //       localStorage.setItem("userInfo", JSON.stringify(userInfo));
+        //       navigate("/eye-tracking");
+        //     });
+        // }
       });
   }, []);
 

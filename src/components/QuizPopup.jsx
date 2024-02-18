@@ -1,8 +1,9 @@
 import { Dialog } from "@primer/react/drafts";
-import { Spinner, Button } from "@primer/react";
+import { Spinner, Button, Box, Popover } from "@primer/react";
 import { InfoIcon, CheckCircleIcon } from "@primer/octicons-react";
 import React from "react";
 import Player from "../assets/player.png";
+import { toast } from "react-hot-toast";
 
 export default function QuizPopup({ isOpen, closePopup, title, subtitle }) {
   const returnFocusRef = React.useRef(null);
@@ -52,7 +53,15 @@ export default function QuizPopup({ isOpen, closePopup, title, subtitle }) {
             alignItems: "start",
           }}
         >
-          <div style={{ width: "400px" }}>
+          <div
+            style={{
+              width: "400px",
+              justifyContent: "start",
+              alignItems: "start",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
             <h3
               style={{
                 color: "#4F76FF",
@@ -124,7 +133,18 @@ export default function QuizPopup({ isOpen, closePopup, title, subtitle }) {
               }}
             >
               <span>Something you might have missed</span>
-              <Button leadingVisual={InfoIcon}>What is this?</Button>
+              <Box position="relative">
+                <Button
+                  leadingVisual={InfoIcon}
+                  onClick={() =>
+                    toast(
+                      "We analyze how much attention you paid to each scene and analyze that to see what you might have missed to strengthen your learning!"
+                    )
+                  }
+                >
+                  What is this?
+                </Button>
+              </Box>
             </div>
             <p>
               If you want to find the derivative of the product of two
