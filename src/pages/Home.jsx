@@ -5,8 +5,27 @@ import GeneratingPopup from "../components/GeneratingPopup";
 import ReadyLessonPopup from "../components/ReadyLessonPopup";
 import QuizPopup from "../components/QuizPopup";
 import GradingPopup from "../components/GradingPopup";
+import { toast } from "react-hot-toast";
 
 export default function Home() {
+  const [nodes, setNodes] = useState([]);
+  const [edges, setEdges] = useState([]);
+  const [baseNodes, setBaseNodes] = useState([]);
+
+  const [popupState, setPopupState] = useState({ state: "closed" });
+
+  const [selectedNode, setSelectedNode] = useState(null);
+
+  useEffect(() => {
+    //get ?quizId if it exists
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const quizId = urlParams.get("quizId");
+    if (quizId) {
+      setPopupState({ state: "quiz" });
+    }
+  }, []);
+
   // const nodes = [
   //   { id: "1", data: { label: "You" } },
   //   { id: "2", data: { label: "Math" } },
@@ -24,10 +43,9 @@ export default function Home() {
   //   { id: "e1-6", source: "1", target: "6", type: "straight" },
   // ];
 
-  const [nodes, setNodes] = useState([]);
-  const [edges, setEdges] = useState([]);
-
-  const [popupState, setPopupState] = useState({ state: "closed" });
+  useEffect(() => {
+    console.log(selectedNode);
+  }, [selectedNode]);
 
   useEffect(() => {
     fetch(
@@ -38,7 +56,7 @@ export default function Home() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          user_id: "1",
+          user_id: "11",
         }),
       }
     )
@@ -46,21 +64,23 @@ export default function Home() {
         return data.json();
       })
       .then((data) => {
+        console.log(data);
         var tempNodes = [];
         for (let i = 0; i < data.nodes.length; i++) {
-          var tempNode = {};
-          tempNode.id = data.nodes[i];
-          tempNode.data = { label: data.nodes[i] };
+          var tempNode = {
+            id: data.nodes[i],
+          };
           tempNodes.push(tempNode);
         }
         setNodes(tempNodes);
+        console.log(tempNodes);
         var tempEdges = [];
         for (let i = 0; i < data.edges.length; i++) {
           var tempEdge = {};
-          tempEdge.id = i.toString();
-          tempEdge.source = data.edges[i][0];
-          tempEdge.target = data.edges[i][1];
-          tempEdge.type = "straight";
+          tempEdge["id"] = Math.random().toString(36).substring(7);
+          tempEdge["source"] = data.edges[i][0];
+          tempEdge["target"] = data.edges[i][1];
+          tempEdge["type"] = "straight";
           tempEdges.push(tempEdge);
         }
         console.log(tempEdges);
@@ -134,39 +154,37 @@ export default function Home() {
           <GeneratingPopup
             isOpen={popupState["status"] == "generating"}
             closePopup={() => setPopupState({ state: "closed" })}
-            title="Integrals"
-            subtitle="Math -> Limits -> Derivatives"
+            node={selectedNode}
           />
         )}
         {popupState["state"] == "readyLesson" && (
           <ReadyLessonPopup
             isOpen={popupState["status"] == "readyLesson"}
             closePopup={() => setPopupState({ state: "closed" })}
-            title="Integrals"
-            subtitle="Math -> Limits -> Derivatives"
+            node={selectedNode}
           />
         )}
         {popupState["state"] == "quiz" && (
           <QuizPopup
             isOpen={popupState["status"] == "quiz"}
             closePopup={() => setPopupState({ state: "closed" })}
-            title="Integrals"
-            subtitle="Math -> Limits -> Derivatives"
+            node={selectedNode}
           />
         )}
         {popupState["state"] == "grading" && (
           <GradingPopup
             isOpen={popupState["status"] == "grading"}
             closePopup={() => setPopupState({ state: "closed" })}
-            title="Integrals"
-            subtitle="Math -> Limits -> Derivatives"
+            node={selectedNode}
           />
         )}
       </div>
       <Graph
         nodesData={nodes}
         edgesData={edges}
+        baseNodes={baseNodes}
         setPopupState={setPopupState}
+        setSelectedNode={setSelectedNode}
       />
     </div>
   );

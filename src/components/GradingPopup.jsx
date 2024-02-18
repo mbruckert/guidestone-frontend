@@ -3,7 +3,7 @@ import { Spinner } from "@primer/react";
 import React from "react";
 import Grading from "../assets/grading.png";
 
-export default function GradingPopup({ isOpen, closePopup, title, subtitle }) {
+export default function GradingPopup({ isOpen, closePopup, node }) {
   const returnFocusRef = React.useRef(null);
   return (
     <>
@@ -13,8 +13,7 @@ export default function GradingPopup({ isOpen, closePopup, title, subtitle }) {
         onClose={() => closePopup()}
         width="2xlarge"
         height="md"
-        title={title}
-        subtitle={subtitle}
+        title={node.node_name}
       >
         <div
           style={{

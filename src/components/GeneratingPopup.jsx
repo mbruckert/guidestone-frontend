@@ -2,12 +2,7 @@ import { Dialog } from "@primer/react/drafts";
 import { Spinner } from "@primer/react";
 import React from "react";
 
-export default function GeneratingPopup({
-  isOpen,
-  closePopup,
-  title,
-  subtitle,
-}) {
+export default function GeneratingPopup({ isOpen, closePopup, node }) {
   const returnFocusRef = React.useRef(null);
   return (
     <>
@@ -17,8 +12,7 @@ export default function GeneratingPopup({
         onClose={() => closePopup()}
         width="2xlarge"
         height="md"
-        title={title}
-        subtitle={subtitle}
+        title={node.node_name}
       >
         <div
           style={{

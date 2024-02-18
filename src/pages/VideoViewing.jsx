@@ -1,9 +1,13 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 export default function VideoViewing() {
   // get the video id from the url
   const { id } = useParams();
+
+  const navigate = useNavigate();
 
   const videoRef = useRef(null);
   const [currentTime, setCurrentTime] = useState(0);
@@ -28,7 +32,9 @@ export default function VideoViewing() {
       })
       .begin()
       .then(() => {
-        setIsWebGazerInitialized(true); // Set flag to true once WebGazer is ready
+        setIsWebGazerInitialized(true);
+        toast("Click play on the video to begin!");
+        webgazer.pause(); // Set flag to true once WebGazer is ready
       })
       .catch((error) => {
         console.error("Error initializing WebGazer:", error);
@@ -64,26 +70,14 @@ export default function VideoViewing() {
       const currentTime = video.currentTime;
       const timeDiff = currentTime - previousTime;
 
-      // Adjust these thresholds as needed to better detect fast forwards/rewinds
-      const fastForwardThreshold = 5; // Example threshold for fast forwarding
-      const rewindThreshold = -5; // Example threshold for rewinding
-      const normalPlaybackRate = 1; // Normal playback rate is 1
+      // Consider a significant jump as any change greater than 2 seconds
+      // This threshold can be adjusted based on the observed behavior of your application
+      const significantJumpThreshold = 8;
 
-      // Detect fast forward or rewind actions
-      if (video.playbackRate === normalPlaybackRate) {
-        if (timeDiff >= fastForwardThreshold) {
+      if (Math.abs(timeDiff) > significantJumpThreshold) {
+        if (timeDiff > 0) {
           console.log("Fast forwarded");
-          setGatheredData((prevData) => ({
-            ...prevData,
-            fastForwards: [
-              ...prevData.fastForwards,
-              {
-                from: previousTime,
-                to: currentTime,
-              },
-            ],
-          }));
-        } else if (timeDiff <= rewindThreshold) {
+        } else {
           console.log("Rewinded");
           setGatheredData((prevData) => ({
             ...prevData,
@@ -103,7 +97,9 @@ export default function VideoViewing() {
     };
 
     const handleEnded = () => {
-      console.log("Video has ended");
+      webgazer.end();
+      window.localStorage.setItem("gatheredData", JSON.stringify(gatheredData));
+      navigate(`/?quizId=${id}`);
     };
 
     video.addEventListener("play", handlePlay);
@@ -113,45 +109,32 @@ export default function VideoViewing() {
   }, [previousTime]);
 
   useEffect(() => {
-    let interval;
     if (isWebGazerInitialized) {
-      const video = videoRef.current;
-      if (video) {
-        video.play().catch((error) => {
-          console.error("Error attempting to play video:", error);
+      const interval = setInterval(() => {
+        webgazer.getCurrentPrediction().then((prediction) => {
+          if (prediction && videoRef.current) {
+            const { x, y } = prediction;
+            setGatheredData((prevData) => ({
+              ...prevData,
+              eyeTracking: [
+                ...prevData.eyeTracking,
+                { x, y, time: videoRef.current.currentTime },
+              ],
+            }));
+          }
         });
-      }
-      interval = setInterval(() => {
-        if (action == "paused") return;
-        const prediction = webgazer.getCurrentPrediction();
-        if (prediction) {
-          prediction.then((data) => {
-            if (data) {
-              setGatheredData((prevData) => ({
-                ...prevData,
-                eyeTracking: [
-                  ...prevData.eyeTracking,
-                  {
-                    x: data.x,
-                    y: data.y,
-                    time: video.currentTime,
-                  },
-                ],
-              }));
-            }
-          });
-        }
-      }, 100);
+      }, 100); // Capture data every 100ms
+
+      return () => clearInterval(interval);
     }
-    return () => clearInterval(interval);
-  }, []);
+  }, [isWebGazerInitialized, action]);
 
   return (
     <div style={{ overflowY: "scroll" }}>
       <video
         ref={videoRef}
         style={{ width: "90vw" }}
-        src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+        src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
         controls
       />
     </div>

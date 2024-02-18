@@ -5,7 +5,7 @@ import React from "react";
 import Player from "../assets/player.png";
 import { toast } from "react-hot-toast";
 
-export default function QuizPopup({ isOpen, closePopup, title, subtitle }) {
+export default function QuizPopup({ isOpen, closePopup, node }) {
   const returnFocusRef = React.useRef(null);
 
   const quizQuestions = [
@@ -42,7 +42,7 @@ export default function QuizPopup({ isOpen, closePopup, title, subtitle }) {
         onClose={() => closePopup()}
         width="2xlarge"
         height="md"
-        title={title}
+        title={node.node_name}
         subtitle={subtitle}
       >
         <div

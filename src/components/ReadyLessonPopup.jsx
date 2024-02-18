@@ -3,14 +3,11 @@ import { Spinner, Button } from "@primer/react";
 import { PlayIcon } from "@primer/octicons-react";
 import React from "react";
 import Player from "../assets/player.png";
+import { useNavigate } from "react-router-dom";
 
-export default function ReadyLessonPopup({
-  isOpen,
-  closePopup,
-  title,
-  subtitle,
-}) {
+export default function ReadyLessonPopup({ isOpen, closePopup, node }) {
   const returnFocusRef = React.useRef(null);
+  const navigate = useNavigate();
   return (
     <>
       <Dialog
@@ -19,12 +16,18 @@ export default function ReadyLessonPopup({
         onClose={() => closePopup()}
         width="2xlarge"
         height="md"
-        title={title}
-        subtitle={subtitle}
+        title={node.node_name}
       >
         <div style={{ padding: "10px" }}>
           <div style={{ display: "flex", gap: "40px" }}>
-            <img src={Player} alt="Player" style={{ width: "300px" }} />
+            <img
+              src={Player}
+              alt="Player"
+              style={{ width: "300px", cursor: "pointer" }}
+              onClick={() => {
+                navigate("/video/1");
+              }}
+            />
             <div style={{ width: "350px" }}>
               <h4>Video Description</h4>
               <p style={{ marginTop: "-20px" }}>

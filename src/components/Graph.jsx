@@ -8,32 +8,32 @@ import ComputerScienceIcon from "../assets/computerscience.svg";
 import PhysicsIcon from "../assets/physics.svg";
 import { toast } from "react-hot-toast";
 
-const graphData = {
-  nodes: [
-    { id: "start_node", name: "Start Node", color: "lightblue" },
-    { id: "math_base_node", name: "Math", color: "lightgreen" },
-    { id: "biology_base_node", name: "Biology", color: "lightcoral" },
-    { id: "chemistry_base_node", name: "Chemistry", color: "lightpink" },
-    {
-      id: "comp_sci_base_node",
-      name: "Computer Science",
-      color: "lightyellow",
-    },
-    { id: "physics_base_node", name: "Physics", color: "lightgrey" },
-    { id: "derivatives_node", name: "Derivatives", color: "#ECECEC" },
-    { id: "integrals_node", name: "Integrals", color: "#ECECEC" },
-    // ... other nodes
-  ],
-  links: [
-    { source: "start_node", target: "math_base_node" },
-    { source: "start_node", target: "biology_base_node" },
-    { source: "start_node", target: "chemistry_base_node" },
-    { source: "start_node", target: "physics_base_node" },
-    { source: "start_node", target: "comp_sci_base_node" },
-    { source: "math_base_node", target: "derivatives_node" },
-    { source: "derivatives_node", target: "integrals_node" },
-  ],
-};
+// const graphData = {
+//   nodes: [
+//     { id: "start_node", name: "Start Node", color: "lightblue" },
+//     { id: "math_base_node", name: "Math", color: "lightgreen" },
+//     { id: "biology_base_node", name: "Biology", color: "lightcoral" },
+//     { id: "chemistry_base_node", name: "Chemistry", color: "lightpink" },
+//     {
+//       id: "comp_sci_base_node",
+//       name: "Computer Science",
+//       color: "lightyellow",
+//     },
+//     { id: "physics_base_node", name: "Physics", color: "lightgrey" },
+//     { id: "derivatives_node", name: "Derivatives", color: "#ECECEC" },
+//     { id: "integrals_node", name: "Integrals", color: "#ECECEC" },
+//     // ... other nodes
+//   ],
+//   links: [
+//     { source: "start_node", target: "math_base_node" },
+//     { source: "start_node", target: "biology_base_node" },
+//     { source: "start_node", target: "chemistry_base_node" },
+//     { source: "start_node", target: "physics_base_node" },
+//     { source: "start_node", target: "comp_sci_base_node" },
+//     { source: "math_base_node", target: "derivatives_node" },
+//     { source: "derivatives_node", target: "integrals_node" },
+//   ],
+// };
 
 const iconMap = {
   math_base_node: MathIcon,
@@ -43,16 +43,27 @@ const iconMap = {
   physics_base_node: PhysicsIcon,
 };
 
-const baseNodeIds = [
-  "start_node",
-  "math_base_node",
-  "biology_base_node",
-  "chemistry_base_node",
-  "comp_sci_base_node",
-  "physics_base_node",
-];
+function Graph({
+  nodesData,
+  edgesData,
+  baseNodes,
+  setPopupState,
+  setSelectedNode,
+}) {
+  const graphData = {
+    nodes: nodesData,
+    links: edgesData,
+  };
 
-function Graph({ nodesData, edgesData, setPopupState }) {
+  const baseNodeIds = [
+    "start_node",
+    "math_base_node",
+    "biology_base_node",
+    "chemistry_base_node",
+    "comp_sci_base_node",
+    "physics_base_node",
+  ];
+
   const [profileImg, setProfileImg] = useState(null);
   const [icons, setIcons] = useState({});
 
@@ -193,9 +204,27 @@ function Graph({ nodesData, edgesData, setPopupState }) {
 
   const handleNodeClick = (node) => {
     if (!baseNodeIds.includes(node.id)) {
-      setPopupState({
-        state: "readyLesson",
-      });
+      fetch(
+        "https://guidestone-functions.azurewebsites.net/api/getNodeDetails",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            node_id: node.id,
+          }),
+        }
+      )
+        .then((data) => {
+          return data.json();
+        })
+        .then((data) => {
+          setSelectedNode(data);
+          setPopupState({
+            state: "readyLesson",
+          });
+        });
     } else {
       toast(
         "This is not a lesson, but intead a representation of what we predict you already know based on your grade level."
